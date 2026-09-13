@@ -2,7 +2,7 @@
   "id": "gga-roll-clarity",
   "title": "GGA Roll Clarity",
   "description": "Roll visibility labels and blind-roll confirmations for GURPS 4e Game Aid.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "authors": [
     {
       "name": "Phil Brown",
@@ -31,5 +31,5 @@
   "readme": "README.md",
   "url": "https://github.com/Farmeroz/gga-roll-clarity",
   "manifest": "https://github.com/Farmeroz/gga-roll-clarity/releases/latest/download/module.json",
-  "download": "https://github.com/Farmeroz/gga-roll-clarity/releases/download/v0.1.1/gga-roll-clarity-v0.1.1.zip"
+  "download": "https://github.com/Farmeroz/gga-roll-clarity/releases/download/v0.1.2/gga-roll-clarity-v0.1.2.zip"
 }

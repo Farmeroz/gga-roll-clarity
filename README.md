@@ -1,6 +1,6 @@
 # GGA Roll Clarity
 
-**Version 0.1.1 · Phil Brown**
+**Version 0.1.2 · Phil Brown**
 
 Roll visibility labels and blind-roll confirmations for GURPS 4e Game Aid. Designed for Foundry VTT V14 and GGA 0.18.x.
 

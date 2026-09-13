@@ -1,3 +1,4 @@
+import * as log from './log.mjs';
 import { ID, ReceiptController, decorate } from './core.js';
 
 let active = false;
@@ -137,14 +138,16 @@ Hooks.once('ready', () => {
   Hooks.on('preCreateChatMessage', (...args) => {
     try {
       controller.before(...args);
-    } catch {
+    } catch (error) {
+      log.error('Preparing a roll confirmation', error);
       ui.notifications.warn(
         'GGA Roll Clarity could not prepare a confirmation. The roll can still proceed.',
       );
     }
   });
   Hooks.on('createChatMessage', (...args) => {
-    void controller.after(...args).catch(() => {
+    void controller.after(...args).catch((error) => {
+      log.error('Posting a roll confirmation', error);
       ui.notifications.warn(
         'GGA Roll Clarity could not confirm this roll. Please check with the GM.',
       );
