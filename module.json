@@ -25,12 +25,8 @@
       }
     ]
   },
-  "esmodules": [
-    "scripts/main.js"
-  ],
-  "styles": [
-    "styles/clarity.css"
-  ],
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/clarity.css"],
   "license": "LICENSE.txt",
   "readme": "README.md",
   "url": "https://github.com/Farmeroz/gga-roll-clarity",
