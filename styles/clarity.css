@@ -1,0 +1,18 @@
+.grc-mode-label {
+  margin: 4px 0 7px;
+  padding: 3px 7px;
+  width: fit-content;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  font-weight: 700;
+}
+.grc-mode-public { border-inline-start: 4px solid #478f79 !important; }
+.grc-mode-gm { border-inline-start: 4px solid #548fc7 !important; }
+.grc-mode-blind { border-inline-start: 5px solid #aa76d1 !important; }
+.grc-mode-self { border-inline-start: 4px solid #ae8948 !important; }
+.grc-mode-custom, .grc-mode-blind-custom { border-inline-start: 4px solid #b77968 !important; }
+.grc-receipt { padding: 5px 0 5px 9px; border-inline-start: 3px solid #aa76d1; }
+.grc-receipt > p { margin: 5px 0 0; }
+.grc-receipt > p:last-child { font-size: 0.85em; opacity: 0.85; }
