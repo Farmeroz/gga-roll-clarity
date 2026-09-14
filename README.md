@@ -1,6 +1,6 @@
 # GGA Roll Clarity
 
-**Version 0.1.2 · Phil Brown**
+**Version 0.1.3 · Phil Brown**
 
 Roll visibility labels and blind-roll confirmations for GURPS 4e Game Aid. Designed for Foundry VTT V14 and GGA 0.18.x.
 
@@ -74,3 +74,7 @@ Untick **GGA Roll Clarity** in **Manage Modules** and reload. Existing confirmat
 Report problems through [GitHub Issues](https://github.com/Farmeroz/gga-roll-clarity/issues). Released under the [MIT licence](LICENSE.txt).
 
 GURPS is a trademark of Steve Jackson Games. This unofficial module is not affiliated with or endorsed by Steve Jackson Games, Foundry Gaming LLC, or the GURPS Game Aid maintainers.
+
+## Help tooltips
+
+Hover over a control or focus it with the keyboard for a short explanation. Press Escape to dismiss the help. Under **Configure Settings → Module Settings → GGA Roll Clarity**, turn off **Show help tooltips** to hide optional help on your client. Labels, settings descriptions, and important notices remain visible. Other users keep their own preference.

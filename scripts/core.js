@@ -179,6 +179,16 @@ export function decorate(message, html, { users, showLabels = true, borders = tr
   const badge = html.ownerDocument.createElement('div');
   badge.className = 'grc-mode-label';
   badge.textContent = LABELS[mode];
+  badge.tabIndex = 0;
+  badge.dataset.help = {
+    public: 'Everyone can see this roll result.',
+    gm: 'The rolling user and the addressed GMs can see this result.',
+    blind: 'The addressed GMs can see the result. The player receives no outcome from this label.',
+    self: 'Only the user who rolled can see this result.',
+    custom: 'This roll uses a custom private recipient list.',
+    'blind-custom':
+      'This blind roll uses a custom or missing recipient list. Check the intended audience with the GM.',
+  }[mode];
   const header = html.querySelector('.message-header');
   if (header) header.after(badge);
   else html.prepend(badge);

@@ -3,7 +3,9 @@
   "README.md",
   "module.json",
   "scripts/core.js",
+  "scripts/help.mjs",
   "scripts/log.mjs",
   "scripts/main.js",
+  "scripts/tooltip-engine.mjs",
   "styles/clarity.css"
 ]

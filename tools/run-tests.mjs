@@ -15,6 +15,14 @@ const args =
     : ['--test', '--test-reporter=tap', ...files.map((name) => `tests/${name}`)];
 if (!files.length && manifest.id !== 'gga-roll-clarity')
   throw new Error('No automated tests found.');
+if (manifest.id === 'gga-roll-clarity') {
+  const helpRun = spawnSync(process.execPath, ['--test', 'tests/tooltip.test.mjs'], {
+    cwd: fileURLToPath(root),
+    env,
+    stdio: 'inherit',
+  });
+  if (helpRun.status !== 0) process.exit(helpRun.status ?? 1);
+}
 const run = spawnSync(process.execPath, args, {
   cwd: fileURLToPath(root),
   env,
