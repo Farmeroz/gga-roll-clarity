@@ -1,5 +1,5 @@
 export async function runSuite() {
-  const { ID, modeOf, labelFromOTF, describeCheck, ReceiptController, decorate } =
+  const { ID, modeOf, labelFromOTF, describeCheck, ReceiptController, decorate, localTimestamp } =
     await import('../scripts/core.js');
   const results = [];
   function assert(condition, message) {
@@ -240,7 +240,7 @@ export async function runSuite() {
     decorate(m, html, { users });
     decorate(m, html, { users });
     assert(html.querySelectorAll('.grc-mode-label').length === 1, 'duplicate badge');
-    assert(html.textContent.includes('player cannot see result'), 'blind label');
+    assert(html.textContent.includes('Player cannot see result'), 'blind label');
     m.blind = false;
     m.whisper = [];
     decorate(m, html, { users });
@@ -309,6 +309,61 @@ export async function runSuite() {
     const text = s.created[0].data.content;
     assert(text.includes('Luke rolled.') && !text.includes('SECRET'), 'unsafe template fallback');
   });
+  await test('Exact timestamps use local message time and reject missing or invalid dates', () => {
+    const timestamp = new Date(2026, 8, 20, 17, 42, 18).getTime();
+    const stamp = localTimestamp(timestamp, 'en-AU');
+    assert(
+      stamp.text.includes('17:42:18') && stamp.text.includes('2026'),
+      'not local time with seconds and year',
+    );
+    assert(stamp.iso === new Date(timestamp).toISOString(), 'wrong instant');
+    for (const value of [undefined, null, NaN, Infinity, '123', 1e20])
+      assert(localTimestamp(value) === null, 'invalid timestamp accepted');
+  });
+  await test('Timestamp toggles preserve native metadata, secret content, and message identity', () => {
+    const html = document.createElement('li');
+    html.innerHTML =
+      '<header class="message-header"><span class="message-sender">Luke</span><time class="message-timestamp">3m ago</time><button>Delete</button></header><div class="message-content">Hidden result</div>';
+    const native = html.querySelector('.message-timestamp');
+    const m = msg({
+      timestamp: new Date(2026, 8, 20, 17, 42, 18).getTime(),
+      isContentVisible: false,
+    });
+    const original = JSON.stringify(m);
+    for (let i = 0; i < 3; i++) decorate(m, html, { users });
+    assert(html.querySelectorAll('.grc-exact-timestamp').length === 1, 'duplicate timestamp');
+    assert(
+      html.querySelector('.grc-mode-label').textContent.includes('Player cannot see result'),
+      'essential explanation missing',
+    );
+    assert(html.classList.contains('grc-exact-time'), 'native time not hidden');
+    assert(
+      html.querySelector('.grc-exact-timestamp').dataset.help.includes('2026'),
+      'timezone help missing',
+    );
+    assert(!html.textContent.includes('SECRET'), 'secret exposed');
+    decorate(m, html, { users, timestamps: false });
+    assert(
+      !html.querySelector('.grc-exact-timestamp') && !html.classList.contains('grc-exact-time'),
+      'time not disabled',
+    );
+    assert(
+      html.querySelector('.message-timestamp') === native && native.textContent === '3m ago',
+      'native time overwritten',
+    );
+    assert(JSON.stringify(m) === original, 'message mutated');
+    decorate({ ...m, visible: false }, html, { users });
+    assert(!html.querySelector('.grc-exact-timestamp'), 'hidden message decorated');
+  });
+  await test('Visible plain messages and receipts receive dates without roll labels', () => {
+    for (const flags of [{}, { [ID]: { receipt: true } }]) {
+      const html = document.createElement('li');
+      html.innerHTML = '<header class="message-header"></header>';
+      decorate(msg({ rolls: [], timestamp: 0, flags }), html, { users });
+      assert(html.querySelector('.grc-exact-timestamp'), 'missing non-roll date');
+      assert(!html.querySelector('.grc-mode-label'), 'non-roll badge');
+    }
+  });
   const hooks = new Map(),
     settings = new Map(),
     definitions = new Map(),
@@ -365,7 +420,7 @@ export async function runSuite() {
   await test('V14 entry point registers settings/hooks and creates receipt through lifecycle', async () => {
     hooks.get('init')();
     hooks.get('ready')();
-    assert(settings.size === 4 && !notifications.length, 'activation or settings');
+    assert(settings.size === 5 && !notifications.length, 'activation or settings');
     const m = msg();
     hooks.get('preCreateChatMessage')(m, {}, {}, 'p1');
     hooks.get('createChatMessage')(m, {}, 'p1');
@@ -378,7 +433,7 @@ export async function runSuite() {
     );
   });
   await test('Cosmetics are client settings; policy remains world-scoped with no reload requirements', () => {
-    for (const key of ['labels', 'borders']) {
+    for (const key of ['labels', 'borders', 'timestamps']) {
       assert(definitions.get(key).scope === 'client', key);
       assert(typeof definitions.get(key).onChange === 'function', key + ' refresh');
     }
@@ -418,6 +473,24 @@ export async function runSuite() {
       );
     assert(saved.length === before, 'appearance produced a message');
     nodes.forEach((html) => html.remove());
+  });
+  await test('Local time setting defaults on and refreshes existing cards immediately', () => {
+    assert(definitions.get('timestamps').default === true, 'not on by default');
+    const m = msg({ id: 'timestamp-live', timestamp: Date.now() });
+    game.messages.set(m.id, m);
+    const html = document.createElement('li');
+    html.innerHTML =
+      '<header class="message-header"><time class="message-timestamp">now</time></header>';
+    document.body.append(html);
+    hooks.get('renderChatMessageHTML')(m, html);
+    assert(html.querySelector('.grc-exact-timestamp'), 'not initially shown');
+    settings.set('timestamps', false);
+    definitions.get('timestamps').onChange(false);
+    assert(!html.querySelector('.grc-exact-timestamp'), 'not removed live');
+    settings.set('timestamps', true);
+    definitions.get('timestamps').onChange(true);
+    assert(html.querySelector('.grc-exact-timestamp'), 'not restored live');
+    html.remove();
   });
   await test('Future Foundry versions pass only when required chat capabilities remain available', () => {
     const future = { ...game, release: { generation: 15 } };

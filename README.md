@@ -1,6 +1,6 @@
 # GGA Roll Clarity
 
-**Version 0.1.3 · Phil Brown**
+**Version 0.2.0 · Phil Brown**
 
 Roll visibility labels and blind-roll confirmations for GURPS 4e Game Aid. Designed for Foundry VTT V14 and GGA 0.18.x.
 
@@ -23,7 +23,7 @@ Choose your roll mode in Foundry, then roll from your character sheet, chat, or 
 | Blind to GM   | Recipient GMs; the player receives a separate confirmation |
 | Self Only     | The person who rolled                                      |
 
-Roll cards display a mode label and coloured border. Your own visible blind-roll placeholder also receives a label while its result stays hidden. Custom recipient lists are labelled separately. If a result is revealed, its label follows the updated visibility.
+Roll cards display a compact mode label and coloured border. Blind-roll labels keep “Player cannot see result” visible without a tooltip. Your own visible blind-roll placeholder also receives a label while its result stays hidden. Custom recipient lists are labelled separately. If a result is revealed, its label follows the updated visibility.
 
 A blind-roll confirmation looks like this:
 
@@ -39,6 +39,7 @@ Open **Configure Settings → GGA Roll Clarity**.
 
 - **Show roll visibility labels:** turn labels on or off for your own view.
 - **Add coloured roll borders:** turn borders on or off independently.
+- **Show exact local timestamps:** enabled by default on chat messages, including rolls and confirmations. Shows the saved message date and your local time, including seconds. Turn off to restore Foundry’s usual time display. The optional tooltip includes the time zone.
 
 These are personal settings for the browser or app you are using. Changes apply immediately to existing cards. After updating from an earlier release, choose your preferred appearance in these settings.
 

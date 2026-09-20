@@ -2,7 +2,7 @@ import { createHelpController, helpResolver } from './tooltip-engine.mjs';
 export const helpConfig = {
   id: 'gga-roll-clarity',
   scope:
-    '.grc-mode-label, .grc-receipt, .grc-blind-label, [name^="gga-roll-clarity."], [data-key^="gga-roll-clarity."], [data-tool="gga-roll-clarity"], [data-control="gga-roll-clarity"]',
+    '.grc-mode-label, .grc-receipt, .grc-blind-label, .grc-exact-timestamp, [name^="gga-roll-clarity."], [data-key^="gga-roll-clarity."], [data-tool="gga-roll-clarity"], [data-control="gga-roll-clarity"]',
   actions: {},
   fields: {},
   rules: [

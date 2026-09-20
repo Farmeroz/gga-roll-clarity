@@ -161,14 +161,57 @@ export function makeReceipt({
 export const LABELS = {
   public: 'Public',
   gm: 'Private to GM – roller can see result',
-  blind: 'Blind to GM – player cannot see result',
+  blind: 'Blind to GM · Player cannot see result',
   self: 'Self Only',
   custom: 'Private – custom recipients',
   'blind-custom': 'Blind – custom or missing recipients',
 };
 
-export function decorate(message, html, { users, showLabels = true, borders = true }) {
+/** Use the saved message time, never the render time or a world/game clock. */
+export function localTimestamp(timestamp, locales = undefined) {
+  if (typeof timestamp !== 'number' || !Number.isFinite(timestamp)) return null;
+  const date = new Date(timestamp);
+  if (!Number.isFinite(date.getTime())) return null;
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: 'h23',
+  };
+  return {
+    text: new Intl.DateTimeFormat(locales, options).format(date),
+    help: new Intl.DateTimeFormat(locales, { ...options, timeZoneName: 'long' }).format(date),
+    iso: date.toISOString(),
+  };
+}
+
+function decorateTimestamp(message, html, enabled) {
+  html.querySelectorAll('.grc-exact-timestamp').forEach((node) => node.remove());
+  html.classList.remove('grc-exact-time');
+  if (!enabled || message.visible === false) return;
+  const stamp = localTimestamp(message.timestamp);
+  const header = html.querySelector('.message-header');
+  if (!stamp || !header) return;
+  const time = html.ownerDocument.createElement('time');
+  time.className = 'grc-exact-timestamp';
+  time.dateTime = stamp.iso;
+  time.textContent = stamp.text;
+  time.dataset.help = `Message created at ${stamp.help}. Shown in your local time zone.`;
+  time.tabIndex = 0;
+  header.append(time);
+  html.classList.add('grc-exact-time');
+}
+
+export function decorate(
+  message,
+  html,
+  { users, showLabels = true, borders = true, timestamps = true },
+) {
   if (!html?.querySelectorAll) return;
+  decorateTimestamp(message, html, timestamps);
   html.querySelectorAll('.grc-mode-label').forEach((node) => node.remove());
   for (const cls of [...html.classList])
     if (cls.startsWith('grc-mode-')) html.classList.remove(cls);

@@ -10,6 +10,7 @@ function appearance() {
     users: game.users,
     showLabels: game.settings.get(ID, 'labels'),
     borders: game.settings.get(ID, 'borders'),
+    timestamps: game.settings.get(ID, 'timestamps'),
   };
 }
 
@@ -73,6 +74,15 @@ Hooks.once('init', () => {
     type: Boolean,
     default: true,
     hint: 'Show a coloured border on your roll cards. This works independently of labels.',
+  });
+  game.settings.register(ID, 'timestamps', {
+    ...common,
+    scope: 'client',
+    onChange: refreshAppearance,
+    name: 'Show exact local timestamps',
+    type: Boolean,
+    default: true,
+    hint: 'Show the saved date and local time, including seconds, on chat messages. Turn off to use Foundry’s usual time display.',
   });
   game.settings.register(ID, 'audience', {
     ...common,
