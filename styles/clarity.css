@@ -1,12 +1,27 @@
 .grc-mode-label {
-  margin: 4px 0 7px;
-  padding: 3px 7px;
+  margin: 2px 0 3px;
+  padding: 1px 5px;
   width: fit-content;
   border: 1px solid currentColor;
   border-radius: 4px;
   font-size: 0.8rem;
-  line-height: 1.35;
+  line-height: 1.25;
   font-weight: 700;
+}
+.grc-exact-time .message-header .message-timestamp {
+  display: none;
+}
+.grc-exact-time .message-header {
+  flex-wrap: wrap;
+}
+.grc-exact-timestamp {
+  flex: 0 0 100%;
+  display: block;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  font-variant-numeric: tabular-nums;
+  white-space: normal;
 }
 .grc-mode-public {
   border-inline-start: 4px solid #478f79 !important;
